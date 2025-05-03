@@ -21,7 +21,7 @@ def main():
                     if "__name__ == \"__main__\"" in content or "__name__ == '__main__'" in content:
                         main_file = file_path
 
-                    if "main.py" in file:
+                    if "main.py" in file or "app.py" in file or "run.py" in file:
                         candidate.append(file_path)
         if not main_file:
             main_file = candidate[0]
