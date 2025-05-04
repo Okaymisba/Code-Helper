@@ -1,7 +1,38 @@
 import os
 
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 from extract_functions_from_file import extract_functions_from_file
 from get_top_level_code import get_top_level_code
+from typing import Dict
+from fastapi import HTTPException
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/")
+async def read_github_url(data: Dict[str, str]):
+    try:
+        repo_url = data.get("repoUrl")
+        if not repo_url:
+            raise HTTPException(status_code=400, detail="Repository URL is required")
+
+        if not repo_url.startswith("https://github.com/"):
+            raise HTTPException(status_code=400, detail="Invalid GitHub repository URL")
+
+        return {"status": "success", "message": "URL received successfully"}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def main():
@@ -31,7 +62,3 @@ def main():
     print(functions)
     for function in functions:
         print(function)
-
-
-if __name__ == "__main__":
-    main()
