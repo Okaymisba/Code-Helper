@@ -59,7 +59,3 @@ async def read_github_url(data: Dict[str, str]):
         raise he
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-def main():
-    repo_path = "test"
