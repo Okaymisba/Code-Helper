@@ -10,7 +10,7 @@ def get_top_level_code(file_path):
     last_end_lineno = 0
 
     for node in tree.body:
-        if not isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+        if not isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.AsyncFunctionDef)):
             start_lineno = node.lineno
 
             if last_end_lineno > 0:
