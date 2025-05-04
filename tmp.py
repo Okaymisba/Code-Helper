@@ -1,34 +1,5 @@
-import ast
 import requests
 import os
-
-def extract_functions_from_filed(file_path):
-    with open(file_path, "r") as f:
-        source = f.read()
-        tree = ast.parse(source, filename=file_path)
-
-    functions = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            func_source = ast.get_source_segment(source, node)
-            functions.append((node.name, node.lineno, func_source))
-
-    return functions
-
-
-def get_top_level_code(file_path):
-    with open(file_path, "r") as f:
-        source = f.read()
-        tree = ast.parse(source, filename=file_path)
-
-    top_level_code = []
-    for node in tree.body:
-        if not isinstance(node, (ast.FunctionDef, ast.ClassDef)):
-            code_segment = ast.get_source_segment(source, node)
-            if code_segment:
-                top_level_code.append(code_segment)
-    return top_level_code
-
 
 def summarize_function_with_lmstudio(code):
     headers = {"Content-Type": "application/json"}
@@ -63,17 +34,3 @@ def find_main_file(repo_path):
                         candidate_files.append(file_path)
 
     return candidate_files[0] if candidate_files else None
-
-def main():
-    main_file = find_main_file("test")
-    functions = extract_functions_from_file(main_file)
-    print(functions)
-    for name, lineno, code in functions:
-        summary = summarize_function_with_lmstudio(code)
-        print(f"Function {name} at line {lineno}:")
-        print(summary)
-        print()
-    print(get_top_level_code(main_file))
-
-if __name__ == "__main__":
-    main()

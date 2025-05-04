@@ -1,7 +1,7 @@
 import os
 
 from extract_functions_from_file import extract_functions_from_file
-from tmp import get_top_level_code
+from get_top_level_code import get_top_level_code
 
 
 def main():
