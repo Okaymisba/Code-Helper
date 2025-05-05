@@ -34,3 +34,13 @@ def find_main_file(repo_path):
                         candidate_files.append(file_path)
 
     return candidate_files[0] if candidate_files else None
+
+
+
+
+def main():
+    print("Starting the script...")
+
+
+if __name__ == "__main__":
+    main()
