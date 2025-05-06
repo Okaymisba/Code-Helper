@@ -23,20 +23,28 @@ app.add_middleware(
 @app.post("/")
 async def read_github_url(data: Dict[str, str]):
     """
-    Asynchronously processes a dictionary containing a GitHub repository URL, validates the
-    URL, clones the repository, extracts function definitions from Python files within the
-    repository, and attempts to identify and analyze the main entry point file based on certain
-    criteria.
+    Processes a GitHub repository URL from the input payload, validates it, clones the
+    repository, extracts Python functions, identifies the main entry point file, retrieves
+    top-level code from the identified file, and returns the results.
 
-    :param data: A dictionary containing a single key-value pair where the key is 'repoUrl' and
-        the value is the GitHub repository URL to be processed.
+    :param data: A dictionary containing the input data. The dictionary must include a key `repoUrl`
+                 associated with a string value, which specifies the URL of a GitHub repository
+                 to process.
     :type data: Dict[str, str]
-    :return: A dictionary with two keys - 'topLevelCode', containing the top-level code
-        extracted from the identified main file, and 'message', indicating the success of the
-        operation.
-    :rtype: Dict[str, str]
-    :raises HTTPException: If 'repoUrl' is missing, it is not a valid GitHub repository URL, or if
-        any other issue arises during the processing of the repository.
+
+    :return: A dictionary containing the top-level code extracted from the identified main file,
+             a list of extracted Python functions, and a success message. Example structure of
+             return value:
+             {
+                 "topLevelCode": "<extracted top level code>",
+                 "message": "Success",
+                 "functions": [list of extracted functions]
+             }
+    :rtype: Dict[str, Union[str, List[str]]]
+
+    :raises HTTPException: If the `repoUrl` is missing or not a valid GitHub repository URL, it
+                            raises an error with a 400 status. In case of other exceptions, it
+                            raises an error with a 500 status containing the exception detail.
     """
     try:
         repo_url = data.get("repoUrl")
@@ -70,7 +78,7 @@ async def read_github_url(data: Dict[str, str]):
 
         top_level_code = get_top_level_code(main_file)
 
-        return {"topLevelCode": top_level_code, "message": "Success"}
+        return {"topLevelCode": top_level_code, "message": "Success", "functions": functions}
     except HTTPException as he:
         raise he
     except Exception as e:
