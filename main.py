@@ -22,6 +22,22 @@ app.add_middleware(
 
 @app.post("/")
 async def read_github_url(data: Dict[str, str]):
+    """
+    Asynchronously processes a dictionary containing a GitHub repository URL, validates the
+    URL, clones the repository, extracts function definitions from Python files within the
+    repository, and attempts to identify and analyze the main entry point file based on certain
+    criteria.
+
+    :param data: A dictionary containing a single key-value pair where the key is 'repoUrl' and
+        the value is the GitHub repository URL to be processed.
+    :type data: Dict[str, str]
+    :return: A dictionary with two keys - 'topLevelCode', containing the top-level code
+        extracted from the identified main file, and 'message', indicating the success of the
+        operation.
+    :rtype: Dict[str, str]
+    :raises HTTPException: If 'repoUrl' is missing, is not a valid GitHub repository URL, or if
+        any other issue arises during the processing of the repository.
+    """
     try:
         repo_url = data.get("repoUrl")
         if not repo_url:
