@@ -35,7 +35,7 @@ async def read_github_url(data: Dict[str, str]):
         extracted from the identified main file, and 'message', indicating the success of the
         operation.
     :rtype: Dict[str, str]
-    :raises HTTPException: If 'repoUrl' is missing, is not a valid GitHub repository URL, or if
+    :raises HTTPException: If 'repoUrl' is missing, it is not a valid GitHub repository URL, or if
         any other issue arises during the processing of the repository.
     """
     try:

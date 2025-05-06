@@ -2,6 +2,21 @@ import ast
 
 
 def get_top_level_code(file_path):
+    """
+    Extracts and returns the top-level executable code (not part of any function or
+    class definition) from the Python source file at the specified file path.
+
+    The function parses the input file using the Abstract Syntax Tree (AST) module
+    to identify and ignore function or class definitions. It then collects
+    top-level code and ensures that blank lines between the sections of the parsed
+    code are also included.
+
+    :param file_path: Path to the Python source file to analyze
+    :type file_path: str
+    :return: A string containing the top-level executable Python code present in
+             the source file
+    :rtype: str
+    """
     with open(file_path, "r") as f:
         source = f.read()
         tree = ast.parse(source, filename=file_path)
