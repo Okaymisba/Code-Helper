@@ -43,7 +43,7 @@ async def read_github_url(data: Dict[str, str]):
     :rtype: Dict[str, Union[str, List[str]]]
 
     :raises HTTPException: If the `repoUrl` is missing or not a valid GitHub repository URL, it
-                            raises an error with a 400 status. In case of other exceptions, it
+                            raises an error with a 400 status. In the case of other exceptions, it
                             raises an error with a 500 status containing the exception detail.
     """
     try:
