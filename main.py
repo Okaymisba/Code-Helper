@@ -4,10 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
 from clone_repo import clone_repo
-from extract_functions_from_file import extract_functions_from_file
-from get_top_level_code import get_top_level_code
 from typing import Dict
 from fastapi import HTTPException
+
+from language_detection import detect_language
+from python.get_main_file_and_functions import get_top_level_code_and_functions
 
 app = FastAPI()
 
@@ -55,30 +56,15 @@ async def read_github_url(data: Dict[str, str]):
             raise HTTPException(status_code=400, detail="Invalid GitHub repository URL")
 
         await clone_repo(repo_url)
-        functions = []
-        main_file = ""
-        candidate = []
+        repo_language = detect_language("cloned_repo")
 
-        for root, _, files in os.walk("cloned_repo"):
-            for file in files:
-                if file.endswith(".py"):
-                    file_path = os.path.join(root, file)
-                    for function in extract_functions_from_file(file_path):
-                        functions.append(function)
-                    with open(file_path, "r", encoding="utf-8") as f:
-                        content = f.read()
-
-                        if "__name__ == \"__main__\"" in content or "__name__ == '__main__'" in content:
-                            main_file = file_path
-
-                        if "main.py" in file or "app.py" in file or "run.py" in file:
-                            candidate.append(file_path)
-            if not main_file:
-                main_file = candidate[0]
-
-        top_level_code = get_top_level_code(main_file)
-
-        return {"topLevelCode": top_level_code, "message": "Success", "functions": functions}
+        if repo_language == "Python":
+                main_file, functions = get_top_level_code_and_functions()
+                return {
+                    "topLevelCode": main_file,
+                    "functions": functions
+                }
+        
     except HTTPException as he:
         raise he
     except Exception as e:
