@@ -64,7 +64,8 @@ async def read_github_url(data: Dict[str, str]):
                     "topLevelCode": main_file,
                     "functions": functions
                 }
-        
+        return None
+
     except HTTPException as he:
         raise he
     except Exception as e:
