@@ -1,5 +1,6 @@
 import ast
 
+
 def extract_function_call_lines_from_code(code):
     """
     Extract function call names and their locations in the given Python code.

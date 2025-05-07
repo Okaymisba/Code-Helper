@@ -3,7 +3,7 @@ from extract_functions_from_file import extract_functions_from_file
 from get_top_level_code import get_top_level_code
 
 
-def get_top_level_code_and_functions(repoPath):
+def get_top_level_code_and_functions():
     functions = []
     main_file = ""
     candidate = []

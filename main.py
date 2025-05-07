@@ -1,5 +1,3 @@
-import os
-
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
@@ -59,11 +57,11 @@ async def read_github_url(data: Dict[str, str]):
         repo_language = detect_language("cloned_repo")
 
         if repo_language == "Python":
-                main_file, functions = get_top_level_code_and_functions()
-                return {
-                    "topLevelCode": main_file,
-                    "functions": functions
-                }
+            main_file, functions = get_top_level_code_and_functions()
+            return {
+                "topLevelCode": main_file,
+                "functions": functions
+            }
         return None
 
     except HTTPException as he:
